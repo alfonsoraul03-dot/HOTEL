@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Residence | Coastal Reserve Properties</title>
+  <meta name="description" content="A vacation home on Anna Maria Island, Florida, booked direct with Coastal Reserve Properties." />
+  <meta name="theme-color" content="#07111f" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Manrope:wght@400;500;600;700&display=swap" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="cr-body">
+  <a class="cr-skip" href="#main">Skip to content</a>
+  <div data-site-nav></div>
+
+  <main id="main">
+    <section class="cr-hero-detail">
+      <div class="cr-hero-detail__img" data-parallax="0.1"><img alt="" data-hero-img fetchpriority="high" /></div>
+      <div class="cr-hero-detail__text cr-enter">
+        <a class="cr-back" href="index.html#residences">← All residences</a>
+        <h1 class="cr-display" data-name>Residence</h1>
+        <p class="cr-copy" data-subtitle></p>
+        <ul class="cr-specs" data-specs></ul>
+      </div>
+    </section>
+
+    <section class="cr-section" style="padding-top: clamp(3rem, 6vw, 5rem)" aria-label="Photo gallery">
+      <div class="cr-wrap cr-mosaic" data-gallery></div>
+    </section>
+
+    <section class="cr-section" style="padding-top: 0">
+      <div class="cr-wrap cr-detail">
+        <div class="cr-detail__main">
+          <p class="cr-lead" data-reveal data-summary></p>
+          <div data-reveal data-details-block hidden>
+            <h2 class="cr-label" style="margin-bottom: 1.25rem">The details</h2>
+            <p class="cr-prose" data-details></p>
+          </div>
+          <div data-reveal data-hood-block hidden>
+            <h2 class="cr-label" style="margin-bottom: 1.25rem">The neighborhood</h2>
+            <p class="cr-prose" data-hood></p>
+          </div>
+          <div class="cr-amen" data-amenities></div>
+        </div>
+        <aside class="cr-detail__aside" id="reserve" aria-label="Book this residence">
+          <a class="cta-book" href="#reserve">Book This Residence <svg width="22" height="10" viewBox="0 0 22 10" fill="none" aria-hidden="true"><path d="M0 5h20M16 1l4 4-4 4" stroke="currentColor" stroke-width="1.2"/></svg></a>
+          <div class="cr-frame" data-booking-frame></div>
+          <p class="cr-meta" data-license hidden></p>
+        </aside>
+      </div>
+    </section>
+
+    <section class="cr-section" style="padding-top: 0" aria-labelledby="more-title">
+      <div class="cr-wrap" style="display: grid; gap: 2.5rem">
+        <h2 class="cr-display cr-h3" id="more-title">More residences</h2>
+        <div class="cr-more" data-more></div>
+      </div>
+    </section>
+  </main>
+
+  <div data-site-footer></div>
+
+  <div class="cr-lightbox" role="dialog" aria-modal="true" aria-label="Photos" data-lightbox hidden>
+    <img alt="" data-lightbox-img />
+    <button class="cr-lightbox__close" type="button" aria-label="Close" data-lb="close">×</button>
+    <button class="cr-lightbox__prev" type="button" aria-label="Previous photo" data-lb="prev">‹</button>
+    <button class="cr-lightbox__next" type="button" aria-label="Next photo" data-lb="next">›</button>
+    <p class="cr-lightbox__count" data-lightbox-count></p>
+  </div>
+
+  <script src="js/residences.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/residence.js"></script>
+</body>
+</html>
