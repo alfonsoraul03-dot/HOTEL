@@ -649,3 +649,4 @@ body.cr-body {
 /* ---------- Static site additions ---------- */
 .cr-lightbox[hidden] { display: none; }
 .cr-close .cr-widget hospitable-direct-mps { display: block; }
+@media (max-width: 860px) { .cr-journey .scroll-scrub__route { display: none; } }
