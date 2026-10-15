@@ -1,0 +1,32 @@
+name: Import Coastal Reserve Properties site
+
+# One-time import of the website project built on Higgsfield.
+# Downloads the exported archive, verifies its checksum and commits it.
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/import-site.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    if: ${{ hashFiles('app/package.json') == '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download and verify export
+        run: |
+          curl -fsSL -o /tmp/site.zip "https://d2ol7oe51mr4n9.cloudfront.net/user_3JkTYSIMBFwy3FWXWC6OIINtfRW/272a362e-9832-4d59-a7a8-dd8a0f62bb43.zip"
+          echo "1a1ef1663f2c21b30aadfe42da283b533da16ecbae2cd1646f18917d68343220  /tmp/site.zip" | sha256sum -c -
+      - name: Unpack into the repository
+        run: unzip -q -o /tmp/site.zip -d .
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Import Coastal Reserve Properties website (Higgsfield export)"
+          git push
