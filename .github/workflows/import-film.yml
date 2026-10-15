@@ -1,0 +1,53 @@
+name: Import opening film
+
+# One-time job: fetches the three generated film segments, joins them into one
+# continuous take, encodes scrub-friendly desktop/mobile MP4s and commits them.
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/import-film.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  film:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install ffmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+      - name: Download segments
+        run: |
+          CDN=https://d2ol7oe51mr4n9.cloudfront.net/user_3JkTYSIMBFwy3FWXWC6OIINtfRW
+          mkdir -p /tmp/f && cd /tmp/f
+          curl -fsSL -o d1.mp4 $CDN/e7371684-3e29-4997-9dc0-5dd327e29bf9.mp4
+          curl -fsSL -o d2.mp4 $CDN/73006b7c-5592-4f0c-8fa2-1e2fa770e036.mp4
+          curl -fsSL -o d3.mp4 $CDN/252b82a1-779c-406d-bc05-e2199f838950.mp4
+          curl -fsSL -o m1.mp4 $CDN/628d778e-c4c7-4541-ae53-fee90c862b6b.mp4
+          curl -fsSL -o m2.mp4 $CDN/f07c17eb-24ff-497c-a4a3-d5285024b90d.mp4
+          curl -fsSL -o m3.mp4 $CDN/49fa25a5-63a5-4988-afab-1d50addc29cb.mp4
+          ls -la
+      - name: Join and encode
+        run: |
+          mkdir -p assets/film && cd /tmp/f
+          ffmpeg -v error -y -i d1.mp4 -i d2.mp4 -i d3.mp4 -filter_complex "[0:v][1:v][2:v]concat=n=3:v=1:a=0[v]" -map "[v]" -an \
+            -c:v libx264 -preset slow -crf 24 -pix_fmt yuv420p -g 8 -keyint_min 8 -sc_threshold 0 -movflags +faststart \
+            "$GITHUB_WORKSPACE/assets/film/coast.mp4"
+          ffmpeg -v error -y -i m1.mp4 -i m2.mp4 -i m3.mp4 -filter_complex "[0:v][1:v][2:v]concat=n=3:v=1:a=0[v]" -map "[v]" -an \
+            -c:v libx264 -preset slow -crf 26 -pix_fmt yuv420p -g 4 -keyint_min 4 -sc_threshold 0 -movflags +faststart \
+            "$GITHUB_WORKSPACE/assets/film/coast-mobile.mp4"
+          cd "$GITHUB_WORKSPACE/assets/film"
+          ffmpeg -v error -y -i coast.mp4 -frames:v 1 -q:v 3 coast-poster.jpg
+          ffmpeg -v error -y -i coast-mobile.mp4 -frames:v 1 -q:v 3 coast-mobile-poster.jpg
+          ls -la
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git pull -q --rebase origin main
+          git add assets/film
+          git diff --cached --quiet && exit 0
+          git commit -m "Add opening film (joined, scrub-encoded)"
+          git push
